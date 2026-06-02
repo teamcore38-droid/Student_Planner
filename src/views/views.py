@@ -14,6 +14,8 @@ from kivy.uix.image import Image
 from kivy.graphics import Color, RoundedRectangle, Rectangle, Line
 from kivy.core.window import Window
 
+from kivy.clock import Clock
+
 from src.views.styles import UIStyles
 from src.controllers.main_controller import MainController
 
@@ -41,6 +43,70 @@ class CanvasWidget(BoxLayout):
                 RoundedRectangle(pos=self.pos, size=self.size, radius=self.radius)
             else:
                 Rectangle(pos=self.pos, size=self.size)
+
+
+class AnimatedSpaceBackground(BoxLayout):
+    """
+    View Component: Draws a seamless space nebula background texture on the canvas
+    and slowly pans it diagonally at 60 FPS to create a dynamic animated starry effect.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bg_rect = None
+        self.x_offset = 0.0
+        self.y_offset = 0.0
+        
+        # Load seamless space texture
+        bg_path = os.path.join(os.path.dirname(__file__), "background.png")
+        if os.path.exists(bg_path):
+            from kivy.core.image import Image as CoreImage
+            self.texture = CoreImage(bg_path).texture
+            self.texture.wrap = 'repeat'
+        else:
+            self.texture = None
+            
+        self.bind(pos=self.redraw, size=self.redraw)
+        # Schedule smooth panning animation at 60 FPS
+        Clock.schedule_interval(self.update_background, 1.0 / 60.0)
+
+    def redraw(self, *args):
+        self.canvas.before.clear()
+        with self.canvas.before:
+            if self.texture:
+                Color(1, 1, 1, 1)  # Full texture color opacity
+                # Infinite wrap mapping coordinates
+                self.bg_rect = Rectangle(
+                    pos=self.pos,
+                    size=self.size,
+                    texture=self.texture,
+                    tex_coords=(
+                        self.x_offset, self.y_offset,
+                        self.x_offset + 1.0, self.y_offset,
+                        self.x_offset + 1.0, self.y_offset + 1.0,
+                        self.x_offset, self.y_offset + 1.0
+                    )
+                )
+            else:
+                # Solid color fallback
+                Color(0.04, 0.04, 0.05, 1.0)
+                Rectangle(pos=self.pos, size=self.size)
+
+    def update_background(self, dt):
+        if self.texture and self.bg_rect:
+            # Shift texture offsets slowly (diagonal cosmic drift)
+            self.x_offset += 0.00010
+            self.y_offset += 0.00005
+            
+            # Keep offset values bounds to avoid overflow
+            self.x_offset %= 1.0
+            self.y_offset %= 1.0
+            
+            self.bg_rect.tex_coords = (
+                self.x_offset, self.y_offset,
+                self.x_offset + 1.0, self.y_offset,
+                self.x_offset + 1.0, self.y_offset + 1.0,
+                self.x_offset, self.y_offset + 1.0
+            )
 
 
 class RoundedCard(CanvasWidget):
@@ -130,8 +196,8 @@ class OnboardingScreen(Screen):
         super().__init__(**kwargs)
         self.controller = controller
 
-        # Deep Slate-Black startup background
-        root = CanvasWidget(bg_color=[0.04, 0.04, 0.05, 1.0], orientation="vertical")
+        # Animated Deep Space scrolling background
+        root = AnimatedSpaceBackground(orientation="vertical")
         root.padding = [16, 20, 16, 20]
         root.spacing = 15
 
@@ -252,8 +318,8 @@ class LoginScreen(Screen):
         super().__init__(**kwargs)
         self.controller = controller
 
-        # Root Dark layout
-        root = CanvasWidget(bg_color=UIStyles.BG_COLOR, orientation="vertical")
+        # Animated Deep Space scrolling background
+        root = AnimatedSpaceBackground(orientation="vertical")
         root.padding = UIStyles.PADDING_OUTER * 1.5
         root.spacing = UIStyles.SPACING_GUTTER
 
