@@ -50,6 +50,30 @@ class RoundedCard(CanvasWidget):
         self.padding = UIStyles.PADDING_INNER
 
 
+class GlowCard(BoxLayout):
+    """
+    View Component: A premium card drawn with a thin glowing neon border line,
+    matching our mock-up designs.
+    """
+    def __init__(self, border_color=UIStyles.ACCENT_COLOR, **kwargs):
+        super().__init__(**kwargs)
+        self.border_color = border_color
+        self.padding = [8, 10, 8, 10]
+        self.spacing = 3
+        self.bind(pos=self.redraw, size=self.redraw)
+
+    def redraw(self, *args):
+        self.canvas.before.clear()
+        with self.canvas.before:
+            # Draw solid card background
+            Color(*UIStyles.CARD_COLOR)
+            RoundedRectangle(pos=self.pos, size=self.size, radius=[12])
+            
+            # Draw thin glowing neon border line
+            Color(*self.border_color)
+            Line(rounded_rectangle=(self.x, self.y, self.width, self.height, 12), width=1.3)
+
+
 class CustomButton(Button):
     """Flat-designed button with custom active hover borders."""
     def __init__(self, bg_color=UIStyles.ACCENT_COLOR, text_color=UIStyles.TEXT_PRIMARY, radius=UIStyles.RADIUS_BUTTON, **kwargs):
@@ -71,86 +95,150 @@ class CustomButton(Button):
             RoundedRectangle(pos=self.pos, size=self.size, radius=self.radius)
 
 
+class GradientPillButton(Button):
+    """
+    View Component: A pill-shaped, premium launch button with an electric-violet
+    background and an outer neon-cyan glowing outline, matching the design mock-up.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.background_color = [0, 0, 0, 0]
+        self.background_normal = ""
+        self.color = [1, 1, 1, 1]
+        self.font_size = "15sp"
+        self.bold = True
+        self.font_name = "Roboto"
+        self.bind(pos=self.redraw, size=self.redraw)
+
+    def redraw(self, *args):
+        self.canvas.before.clear()
+        with self.canvas.before:
+            # Draw solid Pill (Radius size set to half of button height, e.g. 24)
+            Color(*UIStyles.ACCENT_COLOR)
+            RoundedRectangle(pos=self.pos, size=self.size, radius=[24])
+            
+            # Draw Neon Cyan glowing border around the pill shape
+            Color(*UIStyles.LOW_PRIORITY)
+            Line(rounded_rectangle=(self.x, self.y, self.width, self.height, 24), width=1.6)
+
+
 # --- INDIVIDUAL SCREENS ---
 
 class OnboardingScreen(Screen):
-    """View Layer: Premium welcoming introduction screen presenting the planner core features."""
+    """View Layer: Redesigned premium welcoming screen matching the design mock-up layout."""
     def __init__(self, controller: MainController, **kwargs):
         super().__init__(**kwargs)
         self.controller = controller
 
-        # Root dark layout
-        root = CanvasWidget(bg_color=UIStyles.BG_COLOR, orientation="vertical")
-        root.padding = UIStyles.PADDING_OUTER * 1.5
-        root.spacing = UIStyles.SPACING_GUTTER * 1.5
+        # Deep Slate-Black startup background
+        root = CanvasWidget(bg_color=[0.04, 0.04, 0.05, 1.0], orientation="vertical")
+        root.padding = [16, 20, 16, 20]
+        root.spacing = 15
 
-        # Top spacing
-        root.add_widget(BoxLayout(size_hint_y=None, height=20))
-
-        # Brand Identity Card (Logo + Name)
-        brand_box = BoxLayout(orientation="vertical", size_hint_y=0.45, spacing=10)
-        
-        # Load generated branding logo
+        # 1. Main Desk Illustration Image
         logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
         if os.path.exists(logo_path):
-            logo_img = Image(
+            illustration_img = Image(
                 source=logo_path,
-                size_hint=(None, None),
-                size=(160, 160),
+                size_hint_y=0.42,
+                allow_stretch=True,
+                keep_ratio=True,
                 pos_hint={"center_x": 0.5}
             )
-            brand_box.add_widget(logo_img)
+            root.add_widget(illustration_img)
         else:
-            logo_placeholder = Label(text="🎓", font_size="70sp", size_hint_y=None, height=120)
-            brand_box.add_widget(logo_placeholder)
+            logo_placeholder = Label(text="🎓", font_size="70sp", size_hint_y=0.35)
+            root.add_widget(logo_placeholder)
 
+        # 2. App Branding Header
+        header_box = BoxLayout(orientation="vertical", size_hint_y=None, height=55, spacing=2)
         title_lbl = Label(
             text="SMART PLANNER",
-            font_size="26sp",
+            font_size="24sp",
             bold=True,
             color=UIStyles.TEXT_PRIMARY,
             font_name="Roboto",
-            size_hint_y=None,
-            height=30
+            halign="center"
         )
         tagline_lbl = Label(
-            text="Cognitive Load Scaffold for High-Achievers",
+            text="Your AI-powered Academic Command Center",
             font_size="13sp",
-            color=UIStyles.ACCENT_COLOR,
+            color=[0.70, 0.61, 0.84, 1.0],  # Soft purple tint
             font_name="Roboto",
-            size_hint_y=None,
-            height=20
+            halign="center"
         )
-        brand_box.add_widget(title_lbl)
-        brand_box.add_widget(tagline_lbl)
-        root.add_widget(brand_box)
+        header_box.add_widget(title_lbl)
+        header_box.add_widget(tagline_lbl)
+        root.add_widget(header_box)
 
-        # Values Propositions Scroll Panel
-        features_card = RoundedCard(orientation="vertical", size_hint_y=0.4, spacing=10)
+        # 3. Bullet Point Value Statements (with glowing blue bullets)
+        bullets_box = BoxLayout(orientation="vertical", size_hint_y=None, height=80, spacing=4)
+        bullets_box.padding = [40, 0, 40, 0]
         
-        f1 = Label(text="🎓  Module-Centric Scopes\n     Isolated planning aligned to active courses.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
-        f1.bind(size=f1.setter('text_size'))
+        b1 = Label(text="[color=#00E5FF]•[/color]  Plan smarter.", markup=True, font_size="14sp", bold=True, halign="left")
+        b1.bind(size=b1.setter('text_size'))
+        b2 = Label(text="[color=#00E5FF]•[/color]  Study better.", markup=True, font_size="14sp", bold=True, halign="left")
+        b2.bind(size=b2.setter('text_size'))
+        b3 = Label(text="[color=#00E5FF]•[/color]  Achieve more.", markup=True, font_size="14sp", bold=True, halign="left")
+        b3.bind(size=b3.setter('text_size'))
         
-        f2 = Label(text="📊  Progress Analytics\n     Dynamic metrics and horizontal ratio bars.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
-        f2.bind(size=f2.setter('text_size'))
-        
-        f3 = Label(text="🛡️  Atomic Self-Healing Storage\n     Disk synchronization protecting task databases.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
-        f3.bind(size=f3.setter('text_size'))
+        bullets_box.add_widget(b1)
+        bullets_box.add_widget(b2)
+        bullets_box.add_widget(b3)
+        root.add_widget(bullets_box)
 
-        features_card.add_widget(f1)
-        features_card.add_widget(f2)
-        features_card.add_widget(f3)
-        root.add_widget(features_card)
-
-        # Get Started Pulsing Action
-        get_started_btn = CustomButton(
-            text="GET STARTED ➔",
+        # 4. Dot Carousel Indicators
+        carousel_lbl = Label(
+            text="[color=#7C4DFF]•[/color] [color=#7C4DFF]•[/color] [color=#353540]•[/color]",
+            markup=True,
+            font_size="16sp",
             size_hint_y=None,
-            height=50,
+            height=15,
+            halign="center"
+        )
+        root.add_widget(carousel_lbl)
+
+        # 5. Features Glowing Grids (Horizontal Row of 3 Cards)
+        grid_layout = GridLayout(cols=3, size_hint_y=None, height=65, spacing=8)
+        
+        # Card 1: Courses
+        courses_card = GlowCard(border_color=UIStyles.ACCENT_COLOR, orientation="vertical")
+        c_title = Label(text="📚 Courses", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        c_sub = Label(text="Organize tasks", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
+        courses_card.add_widget(c_title)
+        courses_card.add_widget(c_sub)
+        
+        # Card 2: Analytics
+        analytics_card = GlowCard(border_color=UIStyles.LOW_PRIORITY, orientation="vertical")
+        a_title = Label(text="📊 Analytics", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        a_sub = Label(text="Track goals", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
+        analytics_card.add_widget(a_title)
+        analytics_card.add_widget(a_sub)
+        
+        # Card 3: Sync
+        sync_card = GlowCard(border_color=UIStyles.ACCENT_COLOR, orientation="vertical")
+        s_title = Label(text="☁️ Sync", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        s_sub = Label(text="Auto backup", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
+        sync_card.add_widget(s_title)
+        sync_card.add_widget(s_sub)
+        
+        grid_layout.add_widget(courses_card)
+        grid_layout.add_widget(analytics_card)
+        grid_layout.add_widget(sync_card)
+        root.add_widget(grid_layout)
+
+        # Bottom spacer
+        root.add_widget(BoxLayout(size_hint_y=None, height=5))
+
+        # 6. Primary Launch Action Button (Gradient Pill style)
+        launch_btn = GradientPillButton(
+            text="Launch My Planner  ➔",
+            size_hint_y=None,
+            height=48,
             on_press=self.go_to_login
         )
-        root.add_widget(get_started_btn)
-        
+        root.add_widget(launch_btn)
+
         self.add_widget(root)
 
     def go_to_login(self, instance):
