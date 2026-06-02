@@ -257,8 +257,22 @@ class LoginScreen(Screen):
         root.padding = UIStyles.PADDING_OUTER * 1.5
         root.spacing = UIStyles.SPACING_GUTTER
 
+        # Top Header Bar for Back Navigation
+        header = BoxLayout(orientation="horizontal", size_hint_y=None, height=45)
+        back_btn = CustomButton(
+            text="< BACK",
+            size_hint=(None, None),
+            size=(70, 38),
+            bg_color=UIStyles.CARD_COLOR,
+            text_color=UIStyles.ACCENT_COLOR,
+            on_press=self.go_onboarding
+        )
+        header.add_widget(back_btn)
+        header.add_widget(BoxLayout())  # spacer to push button left
+        root.add_widget(header)
+
         # Logo Header Block (Centered Logo)
-        logo_layout = BoxLayout(orientation="vertical", size_hint_y=0.35, spacing=5)
+        logo_layout = BoxLayout(orientation="vertical", size_hint_y=0.32, spacing=5)
         
         logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
         if os.path.exists(logo_path):
@@ -380,6 +394,13 @@ class LoginScreen(Screen):
         else:
             self.err_label.color = UIStyles.ERROR_RED
             self.err_label.text = msg
+
+    def go_onboarding(self, instance):
+        # Clear fields and route back to Onboarding Screen
+        self.err_label.text = ""
+        self.u_input.text = ""
+        self.p_input.text = ""
+        self.manager.current = "onboarding"
 
 
 class DashboardScreen(Screen):
