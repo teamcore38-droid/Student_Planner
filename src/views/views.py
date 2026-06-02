@@ -147,7 +147,7 @@ class OnboardingScreen(Screen):
             )
             root.add_widget(illustration_img)
         else:
-            logo_placeholder = Label(text="🎓", font_size="70sp", size_hint_y=0.35)
+            logo_placeholder = Label(text="ACADEMIC PLANNER", font_size="24sp", size_hint_y=0.35)
             root.add_widget(logo_placeholder)
 
         # 2. App Branding Header
@@ -175,11 +175,11 @@ class OnboardingScreen(Screen):
         bullets_box = BoxLayout(orientation="vertical", size_hint_y=None, height=80, spacing=4)
         bullets_box.padding = [40, 0, 40, 0]
         
-        b1 = Label(text="[color=#00E5FF]•[/color]  Plan smarter.", markup=True, font_size="14sp", bold=True, halign="left")
+        b1 = Label(text="[color=#00E5FF]o[/color]  Plan smarter.", markup=True, font_size="14sp", bold=True, halign="left")
         b1.bind(size=b1.setter('text_size'))
-        b2 = Label(text="[color=#00E5FF]•[/color]  Study better.", markup=True, font_size="14sp", bold=True, halign="left")
+        b2 = Label(text="[color=#00E5FF]o[/color]  Study better.", markup=True, font_size="14sp", bold=True, halign="left")
         b2.bind(size=b2.setter('text_size'))
-        b3 = Label(text="[color=#00E5FF]•[/color]  Achieve more.", markup=True, font_size="14sp", bold=True, halign="left")
+        b3 = Label(text="[color=#00E5FF]o[/color]  Achieve more.", markup=True, font_size="14sp", bold=True, halign="left")
         b3.bind(size=b3.setter('text_size'))
         
         bullets_box.add_widget(b1)
@@ -187,11 +187,11 @@ class OnboardingScreen(Screen):
         bullets_box.add_widget(b3)
         root.add_widget(bullets_box)
 
-        # 4. Dot Carousel Indicators
+        # 4. Dot Carousel Indicators (using standard dot character)
         carousel_lbl = Label(
-            text="[color=#7C4DFF]•[/color] [color=#7C4DFF]•[/color] [color=#353540]•[/color]",
+            text="[color=#7C4DFF].[/color] [color=#7C4DFF].[/color] [color=#353540].[/color]",
             markup=True,
-            font_size="16sp",
+            font_size="24sp",
             size_hint_y=None,
             height=15,
             halign="center"
@@ -203,21 +203,21 @@ class OnboardingScreen(Screen):
         
         # Card 1: Courses
         courses_card = GlowCard(border_color=UIStyles.ACCENT_COLOR, orientation="vertical")
-        c_title = Label(text="📚 Courses", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        c_title = Label(text="Courses", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
         c_sub = Label(text="Organize tasks", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
         courses_card.add_widget(c_title)
         courses_card.add_widget(c_sub)
         
         # Card 2: Analytics
         analytics_card = GlowCard(border_color=UIStyles.LOW_PRIORITY, orientation="vertical")
-        a_title = Label(text="📊 Analytics", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        a_title = Label(text="Analytics", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
         a_sub = Label(text="Track goals", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
         analytics_card.add_widget(a_title)
         analytics_card.add_widget(a_sub)
         
         # Card 3: Sync
         sync_card = GlowCard(border_color=UIStyles.ACCENT_COLOR, orientation="vertical")
-        s_title = Label(text="☁️ Sync", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        s_title = Label(text="Sync", font_size="12sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
         s_sub = Label(text="Auto backup", font_size="9sp", color=UIStyles.TEXT_SECONDARY, halign="center")
         sync_card.add_widget(s_title)
         sync_card.add_widget(s_sub)
@@ -232,7 +232,7 @@ class OnboardingScreen(Screen):
 
         # 6. Primary Launch Action Button (Gradient Pill style)
         launch_btn = GradientPillButton(
-            text="Launch My Planner  ➔",
+            text="Launch My Planner  ->",
             size_hint_y=None,
             height=48,
             on_press=self.go_to_login
@@ -270,7 +270,7 @@ class LoginScreen(Screen):
             )
             logo_layout.add_widget(logo_img)
         else:
-            logo_placeholder = Label(text="🎓", font_size="48sp", size_hint_y=None, height=90)
+            logo_placeholder = Label(text="Smart Planner", font_size="24sp", size_hint_y=None, height=90)
             logo_layout.add_widget(logo_placeholder)
 
         logo_label = Label(
@@ -395,9 +395,9 @@ class DashboardScreen(Screen):
 
         # Top Header Bar
         header = BoxLayout(orientation="horizontal", size_hint_y=None, height=50)
-        self.user_label = Label(text="👤 Hello Student", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="left")
+        self.user_label = Label(text="Hello Student", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="left")
         self.user_label.bind(size=self.user_label.setter('text_size'))
-        settings_btn = CustomButton(text="⚙️", size_hint=(None, None), size=(40, 40), bg_color=UIStyles.CARD_COLOR, on_press=self.go_settings)
+        settings_btn = CustomButton(text="Settings", size_hint=(None, None), size=(80, 40), bg_color=UIStyles.CARD_COLOR, on_press=self.go_settings)
         header.add_widget(self.user_label)
         header.add_widget(settings_btn)
         self.root.add_widget(header)
@@ -437,7 +437,7 @@ class DashboardScreen(Screen):
         self.root.add_widget(priority_layout)
 
         # Section label: Upcoming Deadlines
-        sec_label = Label(text="🕒 CRITICAL DEADLINES (< 48h)", font_size="12sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=20)
+        sec_label = Label(text="CRITICAL DEADLINES (< 48h)", font_size="12sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=20)
         sec_label.bind(size=sec_label.setter('text_size'))
         self.root.add_widget(sec_label)
 
@@ -450,8 +450,8 @@ class DashboardScreen(Screen):
 
         # Navigation Action Panel
         nav_panel = BoxLayout(orientation="horizontal", size_hint_y=0.12, spacing=10)
-        task_list_btn = CustomButton(text="📑 MY TASKS", size_hint_x=0.5, bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_task_list)
-        add_task_btn = CustomButton(text="➕ ADD TASK", size_hint_x=0.5, on_press=self.go_add_task)
+        task_list_btn = CustomButton(text="MY TASKS", size_hint_x=0.5, bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_task_list)
+        add_task_btn = CustomButton(text="ADD TASK", size_hint_x=0.5, on_press=self.go_add_task)
         nav_panel.add_widget(task_list_btn)
         nav_panel.add_widget(add_task_btn)
         self.root.add_widget(nav_panel)
@@ -477,7 +477,7 @@ class DashboardScreen(Screen):
         if not user:
             return
             
-        self.user_label.text = f"👤 Welcome, {user}"
+        self.user_label.text = f"Welcome, {user}"
         self.controller.sync_load()
 
         # Fetch active metrics
@@ -495,7 +495,7 @@ class DashboardScreen(Screen):
         upcoming = self.controller.get_upcoming_tasks(48)
         
         if not upcoming:
-            empty_lbl = Label(text="🎉 No urgent deadlines! Enjoy your study flow.", font_size="13sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=50)
+            empty_lbl = Label(text="No urgent deadlines! Enjoy your study flow.", font_size="13sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=50)
             self.list_box.add_widget(empty_lbl)
         else:
             for t in upcoming:
@@ -545,8 +545,8 @@ class TaskListScreen(Screen):
 
         # Top Header Bar
         header = BoxLayout(orientation="horizontal", size_hint_y=None, height=45)
-        back_btn = CustomButton(text="◀ BACK", size_hint=(None, None), size=(70, 38), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_back)
-        title_lbl = Label(text="📑 MY ACADEMIC TASKS", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        back_btn = CustomButton(text="< BACK", size_hint=(None, None), size=(70, 38), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_back)
+        title_lbl = Label(text="MY ACADEMIC TASKS", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
         header.add_widget(back_btn)
         header.add_widget(title_lbl)
         header.add_widget(BoxLayout(size_hint_x=None, width=70))  # balance spacer
@@ -556,7 +556,7 @@ class TaskListScreen(Screen):
         search_card = RoundedCard(orientation="horizontal", size_hint_y=None, height=50)
         search_card.padding = [10, 5, 10, 5]
         self.search_input = TextInput(
-            hint_text="🔍 Search tasks, modules, notes...",
+            hint_text="Search tasks, modules, notes...",
             multiline=False,
             write_tab=False,
             background_color=[0,0,0,0],
@@ -591,7 +591,7 @@ class TaskListScreen(Screen):
         root.add_widget(self.scroll)
 
         # Floating Bottom Add Action
-        add_btn = CustomButton(text="➕ ADD NEW TASK", size_hint_y=None, height=48, on_press=self.go_add_task)
+        add_btn = CustomButton(text="ADD NEW TASK", size_hint_y=None, height=48, on_press=self.go_add_task)
         root.add_widget(add_btn)
 
         self.add_widget(root)
@@ -676,12 +676,12 @@ class TaskListScreen(Screen):
             card.add_widget(txt_box)
 
             # Priority Badge & Action buttons
-            actions_box = BoxLayout(orientation="horizontal", size_hint_x=None, width=110, spacing=5, pos_hint={"center_y": 0.5})
+            actions_box = BoxLayout(orientation="horizontal", size_hint_x=None, width=120, spacing=5, pos_hint={"center_y": 0.5})
             
             # Edit Button
-            edit_btn = CustomButton(text="✏️", size_hint=(None, None), size=(32, 32), bg_color=UIStyles.CARD_COLOR, on_press=self.make_edit_callback(t))
+            edit_btn = CustomButton(text="Edit", size_hint=(None, None), size=(38, 32), bg_color=UIStyles.CARD_COLOR, on_press=self.make_edit_callback(t))
             # Delete Button
-            del_btn = CustomButton(text="🗑️", size_hint=(None, None), size=(32, 32), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ERROR_RED, on_press=self.make_delete_callback(t.task_id))
+            del_btn = CustomButton(text="Del", size_hint=(None, None), size=(38, 32), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ERROR_RED, on_press=self.make_delete_callback(t.task_id))
             # Priority badge bar
             badge = CanvasWidget(bg_color=UIStyles.get_priority_color(t.priority), radius=[6], size_hint=(None, None), size=(10, 32))
             
@@ -728,7 +728,7 @@ class TaskFormScreen(Screen):
 
         # Header Bar
         header = BoxLayout(orientation="horizontal", size_hint_y=None, height=45)
-        self.header_title = Label(text="📝 CREATE NEW TASK", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY)
+        self.header_title = Label(text="CREATE NEW TASK", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY)
         header.add_widget(self.header_title)
         root.add_widget(header)
 
@@ -818,7 +818,7 @@ class TaskFormScreen(Screen):
         
         if edit_task is None:
             self.editing_task_id = None
-            self.header_title.text = "📝 CREATE NEW TASK"
+            self.header_title.text = "CREATE NEW TASK"
             self.title_in.text = ""
             self.module_in.text = ""
             self.date_in.text = datetime.now().strftime("%Y-%m-%d")  # pre-fill today
@@ -826,7 +826,7 @@ class TaskFormScreen(Screen):
             self.select_priority("Medium")
         else:
             self.editing_task_id = edit_task.task_id
-            self.header_title.text = "📝 EDIT ACADEMIC TASK"
+            self.header_title.text = "EDIT ACADEMIC TASK"
             self.title_in.text = edit_task.title
             self.module_in.text = edit_task.module
             self.date_in.text = edit_task.due_date
@@ -891,8 +891,8 @@ class SettingsScreen(Screen):
 
         # Header Bar
         header = BoxLayout(orientation="horizontal", size_hint_y=None, height=45)
-        back_btn = CustomButton(text="◀ BACK", size_hint=(None, None), size=(70, 38), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_back)
-        title_lbl = Label(text="⚙️ SYSTEM SETTINGS", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
+        back_btn = CustomButton(text="< BACK", size_hint=(None, None), size=(70, 38), bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ACCENT_COLOR, on_press=self.go_back)
+        title_lbl = Label(text="SYSTEM SETTINGS", font_size="16sp", bold=True, color=UIStyles.TEXT_PRIMARY, halign="center")
         header.add_widget(back_btn)
         header.add_widget(title_lbl)
         header.add_widget(BoxLayout(size_hint_x=None, width=70))
@@ -902,9 +902,9 @@ class SettingsScreen(Screen):
         profile_card = RoundedCard(orientation="vertical", size_hint_y=0.22, spacing=5)
         self.profile_lbl = Label(text="STUDENT PROFILE", font_size="12sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=18)
         self.profile_lbl.bind(size=self.profile_lbl.setter('text_size'))
-        self.username_lbl = Label(text="👤 Username: -", font_size="14sp", color=UIStyles.TEXT_PRIMARY, halign="left", size_hint_y=None, height=22)
+        self.username_lbl = Label(text="Username: -", font_size="14sp", color=UIStyles.TEXT_PRIMARY, halign="left", size_hint_y=None, height=22)
         self.username_lbl.bind(size=self.username_lbl.setter('text_size'))
-        self.inst_lbl = Label(text="🏫 Institution: York St John University", font_size="13sp", color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=22)
+        self.inst_lbl = Label(text="Institution: York St John University", font_size="13sp", color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=22)
         self.inst_lbl.bind(size=self.inst_lbl.setter('text_size'))
         profile_card.add_widget(self.profile_lbl)
         profile_card.add_widget(self.username_lbl)
@@ -915,11 +915,11 @@ class SettingsScreen(Screen):
         sys_card = RoundedCard(orientation="vertical", size_hint_y=0.25, spacing=5)
         self.sys_title = Label(text="DATA STORAGE STATS", font_size="12sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=18)
         self.sys_title.bind(size=self.sys_title.setter('text_size'))
-        self.tasks_lbl = Label(text="💾 Scoped Database Records: 0", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left", size_hint_y=None, height=22)
+        self.tasks_lbl = Label(text="Scoped Database Records: 0", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left", size_hint_y=None, height=22)
         self.tasks_lbl.bind(size=self.tasks_lbl.setter('text_size'))
-        self.format_lbl = Label(text="🗄️ Save Format: Atomic JSON", font_size="13sp", color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=22)
+        self.format_lbl = Label(text="Save Format: Atomic JSON", font_size="13sp", color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=22)
         self.format_lbl.bind(size=self.format_lbl.setter('text_size'))
-        self.file_lbl = Label(text="📂 DB Path: storage.json", font_size="11sp", color=UIStyles.TEXT_MUTED, halign="left", size_hint_y=None, height=22)
+        self.file_lbl = Label(text="DB Path: storage.json", font_size="11sp", color=UIStyles.TEXT_MUTED, halign="left", size_hint_y=None, height=22)
         self.file_lbl.bind(size=self.file_lbl.setter('text_size'))
         sys_card.add_widget(self.sys_title)
         sys_card.add_widget(self.tasks_lbl)
@@ -929,7 +929,7 @@ class SettingsScreen(Screen):
 
         # Academic Citation Card (Distinction criteria for Professional Practice)
         cite_card = RoundedCard(orientation="vertical", size_hint_y=0.33, spacing=5)
-        cite_title = Label(text="🎓 ACADEMIC REFERENCE STANDARDS", font_size="11sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=18)
+        cite_title = Label(text="ACADEMIC REFERENCE STANDARDS", font_size="11sp", bold=True, color=UIStyles.TEXT_SECONDARY, halign="left", size_hint_y=None, height=18)
         cite_title.bind(size=cite_title.setter('text_size'))
         self.cite_desc = Label(
             text="* Citation standard: York St John Harvard Style.\n"
@@ -949,7 +949,7 @@ class SettingsScreen(Screen):
 
         # Controls
         ctrls = BoxLayout(orientation="vertical", size_hint_y=0.2, spacing=10)
-        self.clear_btn = CustomButton(text="🚨 PURGE ALL USER DATA", bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ERROR_RED, size_hint_y=0.5, on_press=self.do_clear_storage)
+        self.clear_btn = CustomButton(text="PURGE ALL USER DATA", bg_color=UIStyles.CARD_COLOR, text_color=UIStyles.ERROR_RED, size_hint_y=0.5, on_press=self.do_clear_storage)
         logout_btn = CustomButton(text="LOG OUT", size_hint_y=0.5, on_press=self.do_logout)
         ctrls.add_widget(self.clear_btn)
         ctrls.add_widget(logout_btn)
@@ -964,11 +964,11 @@ class SettingsScreen(Screen):
 
     def refresh_data(self):
         user = self.controller.get_logged_in_user()
-        self.username_lbl.text = f"👤 Username: {user if user else 'Guest'}"
+        self.username_lbl.text = f"Username: {user if user else 'Guest'}"
         self.controller.sync_load()
         records_count = len(self.controller.get_user_tasks())
-        self.tasks_lbl.text = f"💾 Scoped Database Records: {records_count}"
-        self.clear_btn.text = "🚨 PURGE ALL USER DATA"
+        self.tasks_lbl.text = f"Scoped Database Records: {records_count}"
+        self.clear_btn.text = "PURGE ALL USER DATA"
         self.clear_btn.bg_color = UIStyles.CARD_COLOR
         self.clear_btn.redraw()
         self.confirm_state = False
@@ -980,7 +980,7 @@ class SettingsScreen(Screen):
     def do_clear_storage(self, instance):
         if not self.confirm_state:
             # First tap: prompt confirmation
-            self.clear_btn.text = "⚠️ TAP AGAIN TO CONFIRM PURGE"
+            self.clear_btn.text = "TAP AGAIN TO CONFIRM PURGE"
             self.clear_btn.bg_color = UIStyles.ERROR_RED
             self.clear_btn.redraw()
             self.confirm_state = True
