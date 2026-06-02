@@ -1,0 +1,82 @@
+```mermaid
+flowchart TD
+    %% Define Global Themes & Styling
+    classDef authClass fill:#F5E0FF,stroke:#7C4DFF,stroke-width:2px,color:#000000;
+    classDef coreClass fill:#E0F7FA,stroke:#00E5FF,stroke-width:2px,color:#000000;
+    classDef modalClass fill:#FFF3E0,stroke:#FFB300,stroke-width:2px,color:#000000;
+    classDef systemClass fill:#ECEFF1,stroke:#607D8B,stroke-width:1px,stroke-dasharray: 5 5,color:#000000;
+
+    %% Entry State
+    Start([🚀 App Startup]) --> InitCheck{Session Persistent?}
+    InitCheck -- No Session --> LoginView[🔑 Login Screen]
+    InitCheck -- Active Session --> DashView[📊 Dashboard Screen]
+
+    %% Authentication Boundary
+    subgraph Authentication_Layer [Authentication Boundary]
+        LoginView --> |1. User Inputs Credentials| AuthSubmit{Credentials Valid?}
+        AuthSubmit -- "Invalid (Length/Regex Error)" --> ShowLoginErr[⚠️ Input Validation Feedback]
+        ShowLoginErr --> LoginView
+        AuthSubmit -- "Success (Generate Salt Hash Match)" --> SetSession[💾 Initialize Session & Load JSON]
+        SetSession --> DashView
+    end
+
+    %% Dashboard Boundary
+    subgraph Dashboard_Layer [Dashboard Screen Hub]
+        DashView --> |Tap Gear Icon| SettingsView[⚙️ Settings Screen]
+        DashView --> |Tap FAB / Add| AddFormView[📝 Task Form: Add Mode]
+        DashView --> |Tap Priority Cards / List| TaskListView[📑 Task List & Search Screen]
+    end
+
+    %% Task Management Boundary
+    subgraph Task_Management [Task Management States]
+        TaskListView --> |Tap Back Arrow| DashView
+        TaskListView --> |Tap 'Add Task'| AddFormView
+        TaskListView --> |Tap 'Edit' on Task Card| EditFormView[📝 Task Form: Edit Mode]
+        
+        %% List Operations
+        TaskListView --> |Tap Checkbox| CompleteToggle[🔄 Toggle Task Status]
+        CompleteToggle --> |Update In-Memory & File| TaskListView
+        
+        TaskListView --> |Tap Delete| ConfirmDeleteModal{❓ Confirm Delete?}
+        ConfirmDeleteModal -- Cancel --> TaskListView
+        ConfirmDeleteModal -- Delete Task --> DeleteExec[🗑️ Remove Task & Save]
+        DeleteExec --> TaskListView
+    end
+
+    %% Form Operations
+    subgraph Task_Forms [Task Operations & Saving]
+        AddFormView --> |Tap Cancel| DashView
+        AddFormView --> |Tap Save| AddValidate{Input Clean?}
+        
+        EditFormView --> |Tap Cancel| TaskListView
+        EditFormView --> |Tap Save| EditValidate{Input Clean?}
+
+        AddValidate -- Errors (Empty/Past Date) --> AddFormErr[⚠️ Form Validation UI]
+        AddFormErr --> AddFormView
+        AddValidate -- Clean Data --> SaveAdd[💾 Create Task & Atomic Save]
+        SaveAdd --> DashView
+
+        EditValidate -- Errors (Empty/Past Date) --> EditFormErr[⚠️ Form Validation UI]
+        EditFormErr --> EditFormView
+        EditValidate -- Clean Data --> SaveEdit[💾 Update Task & Atomic Save]
+        SaveEdit --> TaskListView
+    end
+
+    %% Settings Operations
+    subgraph Settings_Layer [System Preferences & Citation]
+        SettingsView --> |Tap Back Arrow| DashView
+        SettingsView --> |Tap Log Out| ClearSession[🧹 Terminate Session]
+        ClearSession --> LoginView
+
+        SettingsView --> |Tap 'Clear Storage'| ClearDataModal{❓ Confirm Purge?}
+        ClearDataModal -- Cancel --> SettingsView
+        ClearDataModal -- Wipe Database --> PurgeExec[🗑️ Delete storage.json & Session]
+        PurgeExec --> LoginView
+    end
+
+    %% Assign styles to diagram blocks
+    class LoginView,AuthSubmit,ShowLoginErr,SetSession authClass;
+    class DashView,SettingsView,TaskListView coreClass;
+    class ConfirmDeleteModal,ClearDataModal,AddValidate,EditValidate modalClass;
+    class Start,InitCheck systemClass;
+```
