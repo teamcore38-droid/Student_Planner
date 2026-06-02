@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local databases (Private student data)
+storage.json
+storage.json.bak
+storage.json.tmp
+storage.json.corrupt
+test_db.json
+test_db.json.bak
+test_db.json.tmp
+test_db.json.corrupt
+
+# IDE and environment configs
+.idea/
+.vscode/
+.venv/
+venv/
+ENV/
+env/
