@@ -1,4 +1,5 @@
 import sys
+import os
 from datetime import datetime
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -9,6 +10,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.checkbox import CheckBox
+from kivy.uix.image import Image
 from kivy.graphics import Color, RoundedRectangle, Rectangle, Line
 from kivy.core.window import Window
 
@@ -71,6 +73,91 @@ class CustomButton(Button):
 
 # --- INDIVIDUAL SCREENS ---
 
+class OnboardingScreen(Screen):
+    """View Layer: Premium welcoming introduction screen presenting the planner core features."""
+    def __init__(self, controller: MainController, **kwargs):
+        super().__init__(**kwargs)
+        self.controller = controller
+
+        # Root dark layout
+        root = CanvasWidget(bg_color=UIStyles.BG_COLOR, orientation="vertical")
+        root.padding = UIStyles.PADDING_OUTER * 1.5
+        root.spacing = UIStyles.SPACING_GUTTER * 1.5
+
+        # Top spacing
+        root.add_widget(BoxLayout(size_hint_y=None, height=20))
+
+        # Brand Identity Card (Logo + Name)
+        brand_box = BoxLayout(orientation="vertical", size_hint_y=0.45, spacing=10)
+        
+        # Load generated branding logo
+        logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
+        if os.path.exists(logo_path):
+            logo_img = Image(
+                source=logo_path,
+                size_hint=(None, None),
+                size=(160, 160),
+                pos_hint={"center_x": 0.5}
+            )
+            brand_box.add_widget(logo_img)
+        else:
+            logo_placeholder = Label(text="🎓", font_size="70sp", size_hint_y=None, height=120)
+            brand_box.add_widget(logo_placeholder)
+
+        title_lbl = Label(
+            text="SMART PLANNER",
+            font_size="26sp",
+            bold=True,
+            color=UIStyles.TEXT_PRIMARY,
+            font_name="Roboto",
+            size_hint_y=None,
+            height=30
+        )
+        tagline_lbl = Label(
+            text="Cognitive Load Scaffold for High-Achievers",
+            font_size="13sp",
+            color=UIStyles.ACCENT_COLOR,
+            font_name="Roboto",
+            size_hint_y=None,
+            height=20
+        )
+        brand_box.add_widget(title_lbl)
+        brand_box.add_widget(tagline_lbl)
+        root.add_widget(brand_box)
+
+        # Values Propositions Scroll Panel
+        features_card = RoundedCard(orientation="vertical", size_hint_y=0.4, spacing=10)
+        
+        f1 = Label(text="🎓  Module-Centric Scopes\n     Isolated planning aligned to active courses.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
+        f1.bind(size=f1.setter('text_size'))
+        
+        f2 = Label(text="📊  Progress Analytics\n     Dynamic metrics and horizontal ratio bars.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
+        f2.bind(size=f2.setter('text_size'))
+        
+        f3 = Label(text="🛡️  Atomic Self-Healing Storage\n     Disk synchronization protecting task databases.", font_size="13sp", color=UIStyles.TEXT_PRIMARY, halign="left")
+        f3.bind(size=f3.setter('text_size'))
+
+        features_card.add_widget(f1)
+        features_card.add_widget(f2)
+        features_card.add_widget(f3)
+        root.add_widget(features_card)
+
+        # Get Started Pulsing Action
+        get_started_btn = CustomButton(
+            text="GET STARTED ➔",
+            size_hint_y=None,
+            height=50,
+            on_press=self.go_to_login
+        )
+        root.add_widget(get_started_btn)
+        
+        self.add_widget(root)
+
+    def go_to_login(self, instance):
+        # Route to Login screen
+        self.manager.current = "login"
+
+
 class LoginScreen(Screen):
     """View Layer: Handles user logins and registrations."""
     def __init__(self, controller: MainController, **kwargs):
@@ -79,34 +166,52 @@ class LoginScreen(Screen):
 
         # Root Dark layout
         root = CanvasWidget(bg_color=UIStyles.BG_COLOR, orientation="vertical")
-        root.padding = UIStyles.PADDING_OUTER * 2
-        root.spacing = UIStyles.SPACING_GUTTER * 2
+        root.padding = UIStyles.PADDING_OUTER * 1.5
+        root.spacing = UIStyles.SPACING_GUTTER
 
-        # Header Logo Block
-        logo_layout = BoxLayout(orientation="vertical", size_hint_y=0.25)
+        # Logo Header Block (Centered Logo)
+        logo_layout = BoxLayout(orientation="vertical", size_hint_y=0.35, spacing=5)
+        
+        logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
+        if os.path.exists(logo_path):
+            logo_img = Image(
+                source=logo_path,
+                size_hint=(None, None),
+                size=(110, 110),
+                pos_hint={"center_x": 0.5}
+            )
+            logo_layout.add_widget(logo_img)
+        else:
+            logo_placeholder = Label(text="🎓", font_size="48sp", size_hint_y=None, height=90)
+            logo_layout.add_widget(logo_placeholder)
+
         logo_label = Label(
-            text="💥 SMART PLANNER",
-            font_size="28sp",
+            text="SMART PLANNER",
+            font_size="22sp",
             bold=True,
-            color=UIStyles.ACCENT_COLOR,
-            font_name="Roboto"
+            color=UIStyles.TEXT_PRIMARY,
+            font_name="Roboto",
+            size_hint_y=None,
+            height=28
         )
         sub_label = Label(
-            text="Organize Your Focus",
-            font_size="14sp",
+            text="Secure Academic Credentials Gate",
+            font_size="12sp",
             color=UIStyles.TEXT_SECONDARY,
-            font_name="Roboto"
+            font_name="Roboto",
+            size_hint_y=None,
+            height=16
         )
         logo_layout.add_widget(logo_label)
         logo_layout.add_widget(sub_label)
         root.add_widget(logo_layout)
 
         # Form Inputs Panel
-        form_card = RoundedCard(orientation="vertical", size_hint_y=0.5, spacing=15)
+        form_card = RoundedCard(orientation="vertical", size_hint_y=0.45, spacing=12)
         
         # Username Input
-        u_box = BoxLayout(orientation="vertical", spacing=5)
-        u_label = Label(text="Username", font_size="12sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=20, halign="left")
+        u_box = BoxLayout(orientation="vertical", spacing=4)
+        u_label = Label(text="Username", font_size="12sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=18, halign="left")
         u_label.bind(size=u_label.setter('text_size'))
         self.u_input = TextInput(
             text="",
@@ -121,8 +226,8 @@ class LoginScreen(Screen):
         form_card.add_widget(u_box)
 
         # Password Input
-        p_box = BoxLayout(orientation="vertical", spacing=5)
-        p_label = Label(text="Password (min 6 characters)", font_size="12sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=20, halign="left")
+        p_box = BoxLayout(orientation="vertical", spacing=4)
+        p_label = Label(text="Password (min 6 characters)", font_size="12sp", color=UIStyles.TEXT_SECONDARY, size_hint_y=None, height=18, halign="left")
         p_label.bind(size=p_label.setter('text_size'))
         self.p_input = TextInput(
             text="",
@@ -138,12 +243,12 @@ class LoginScreen(Screen):
         form_card.add_widget(p_box)
 
         # Error notification label
-        self.err_label = Label(text="", font_size="12sp", color=UIStyles.ERROR_RED, size_hint_y=None, height=25)
+        self.err_label = Label(text="", font_size="12sp", color=UIStyles.ERROR_RED, size_hint_y=None, height=22)
         form_card.add_widget(self.err_label)
         root.add_widget(form_card)
 
         # Buttons Control Panel
-        btns_layout = BoxLayout(orientation="vertical", size_hint_y=0.25, spacing=10)
+        btns_layout = BoxLayout(orientation="vertical", size_hint_y=0.2, spacing=8)
         
         login_btn = CustomButton(text="LOG IN", size_hint_y=0.5, on_press=self.do_login)
         register_btn = CustomButton(
@@ -814,12 +919,13 @@ class SmartStudentPlannerApp(App):
 
     def build(self):
         self.title = "Smart Student Planner"
-        self.icon = "icon.png"
+        self.icon = "src/views/logo.png"  # Set professional generated brand icon!
 
         # Screen Manager
         sm = ScreenManager()
         
-        # Instantiate and add screens
+        # Instantiate and add screens (Starting with the new visual Onboarding Screen!)
+        sm.add_widget(OnboardingScreen(self.controller, name="onboarding"))
         sm.add_widget(LoginScreen(self.controller, name="login"))
         sm.add_widget(DashboardScreen(self.controller, name="dashboard"))
         sm.add_widget(TaskListScreen(self.controller, name="task_list"))
