@@ -67,7 +67,13 @@ Launch the graphic Model-View-Controller student interface:
 python src/main.py
 ```
 
-### 3. Running the Headless Test Suite
+### 3. Seeding Sample Student Coursework Data
+To instantly register a default student profile (`student` / `password123`) and seed the datastore with five realistic coursework tasks across four modules (scoping relative upcoming due dates and pre-marking one as completed to show progress):
+```powershell
+python src/seed.py
+```
+
+### 4. Running the Headless Test Suite
 To run all **16 automated unit tests** (verifying persistence stability, hashing, and filters headlessly):
 ```powershell
 python -m unittest discover -s src/tests
